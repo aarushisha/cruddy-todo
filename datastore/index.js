@@ -15,7 +15,7 @@ exports.create = (text, callback) => {
       } else {
         callback(null, { id, text });
       }
-    })
+    });
   });
 };
 
