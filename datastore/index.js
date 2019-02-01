@@ -49,18 +49,19 @@ exports.update = (id, text, callback) => {
     } else {
       callback(new Error(`No item with id: ${id}`));
     } 
-  })
+  });
 };
 
-exports.delete = (id, callback) => {
-  var item = items[id];
-  delete items[id];
-  if (!item) {
-    // report an error if item not found
-    callback(new Error(`No item with id: ${id}`));
-  } else {
-    callback();
-  }
+exports.delete = (id, callback) => {  
+    fs.stat(path.join(exports.dataDir, `${id}.txt`), function(err, stats) {
+      if (stats) {
+        fs.unlink(path.join(exports.dataDir, `${id}.txt`), function(err) {
+          callback();
+        });
+      } else {
+        callback(new Error(`No item with id: ${id}`));
+      }
+    });
 };
 
 // Config+Initialization code -- DO NOT MODIFY /////////////////////////////////
