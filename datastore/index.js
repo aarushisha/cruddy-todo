@@ -10,20 +10,24 @@ var items = {};
 exports.create = (text, callback) => {
   counter.getNextUniqueId(function(err, id) {
     fs.writeFile(path.join(exports.dataDir, `${id}.txt`), text, function(err, data) {
-      if(err) {
-        console.log('err in exports.create ', err);
-      } else {
-        callback(null, { id, text });
-      }
-    })
-  });  
+    	  if(err) {
+          console.log('err in exports.create ', err);
+        } else {
+          callback(null, { id, text });
+        }
+      })
+    }); 
 };
 
 exports.readAll = (callback) => {
-  var data = _.map(items, (text, id) => {
-    return { id, text };
-  });
-  callback(null, data);
+  fs.readdir(exports.dataDir, function(err, files){
+    var data = _.map(files, (zeroPaddedNumber, index) => {
+      var id = zeroPaddedNumber.slice(0, 5);
+      return { id, text: id };
+    });
+
+    callback(null, data);
+  }); 
 };
 
 exports.readOne = (id, callback) => {
