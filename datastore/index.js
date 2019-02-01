@@ -41,13 +41,15 @@ exports.readOne = (id, callback) => {
 };
 
 exports.update = (id, text, callback) => {
-  var item = items[id];
-  if (!item) {
-    callback(new Error(`No item with id: ${id}`));
-  } else {
-    items[id] = text;
-    callback(null, { id, text });
-  }
+  fs.stat(path.join(exports.dataDir, `${id}.txt`), function(err, stats) {
+    if (stats) {
+      fs.writeFile(path.join(exports.dataDir, `${id}.txt`), text, function(err, data) {
+        callback(null, { id, text });
+      });
+    } else {
+      callback(new Error(`No item with id: ${id}`));
+    } 
+  })
 };
 
 exports.delete = (id, callback) => {
