@@ -20,7 +20,7 @@ const cleanTestDatastore = () => {
     todo => fs.unlinkSync(path.join(todos.dataDir, todo))
   );
 };
-
+console.log('hi from line 23');
 describe('getNextUniqueId', () => {
   before(initializeTestFiles);
   beforeEach(initializeTestCounter);
@@ -29,6 +29,8 @@ describe('getNextUniqueId', () => {
   it('should use error first callback pattern', (done) => {
     counter.getNextUniqueId((err, id) => {
       expect(err).to.be.null;
+      console.log('error inside the test ' , err);
+      console.log('id inside the test ' , id);
       expect(id).to.exist;
       done();
     });
@@ -54,6 +56,7 @@ describe('getNextUniqueId', () => {
     fs.writeFileSync(counter.counterFile, '00371');
     counter.getNextUniqueId((err, id) => {
       const counterFileContents = fs.readFileSync(counter.counterFile).toString();
+      console.log(counterFileContents);
       expect(counterFileContents).to.equal('00372');
       done();
     });
@@ -119,12 +122,12 @@ describe('todos', () => {
     it('should return an array with all saved todos', (done) => {
       const todo1text = 'todo 1';
       const todo2text = 'todo 2';
-      const expectedTodoList = [{ id: '00001', text: '00001' }, { id: '00002', text: '00002' }];
+      const expectedTodoList = [{ id: '00001', text: todo1text}, { id: '00002', text: todo2text }];
       todos.create(todo1text, (err, todo) => {
         todos.create(todo2text, (err, todo) => {
           todos.readAll((err, todoList) => {
             expect(todoList).to.have.lengthOf(2);
-            expect(todoList).to.deep.include.members(expectedTodoList, 'NOTE: Text field should use the Id initially');
+            expect(todoList).to.deep.include.members(expectedTodoList);
             done();
           });
         });
