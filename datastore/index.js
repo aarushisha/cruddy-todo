@@ -11,17 +11,14 @@ var items = {};
 exports.create = (text, callback) => {
   counter.getNextUniqueId(function(err, id) {
     fs.writeFile(path.join(exports.dataDir, `${id}.txt`), text, function(err, data) {
-    	  if(err) {
-          console.log('err in exports.create ', err);
-        } else {
-          callback(null, { id, text });
-        }
-      })
-    }); 
+      if (err) {
+        console.log('err in exports.create ', err);
+      } else {
+        callback(null, { id, text });
+      }
+    });
+  });
 };
-
-
-
 
 
 exports.readOne = (id, callback) => {
@@ -59,20 +56,20 @@ exports.update = (id, text, callback) => {
       });
     } else {
       callback(new Error(`No item with id: ${id}`));
-    } 
+    }
   });
 };
 
-exports.delete = (id, callback) => {  
-    fs.stat(path.join(exports.dataDir, `${id}.txt`), function(err, stats) {
-      if (stats) {
-        fs.unlink(path.join(exports.dataDir, `${id}.txt`), function(err) {
-          callback();
-        });
-      } else {
-        callback(new Error(`No item with id: ${id}`));
-      }
-    });
+exports.delete = (id, callback) => {
+  fs.stat(path.join(exports.dataDir, `${id}.txt`), function(err, stats) {
+    if (stats) {
+      fs.unlink(path.join(exports.dataDir, `${id}.txt`), function(err) {
+        callback();
+      });
+    } else {
+      callback(new Error(`No item with id: ${id}`));
+    }
+  });
 };
 
 // Config+Initialization code -- DO NOT MODIFY /////////////////////////////////

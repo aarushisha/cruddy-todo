@@ -45,7 +45,7 @@ exports.getNextUniqueId = (callback) => {
     } else {
       counter = fileData + 1;
       writeCounter(counter, function (err, data) {
-         callback(null, zeroPaddedNumber(counter));
+        callback(null, zeroPaddedNumber(counter));
       });
     }
   });
