@@ -20,7 +20,6 @@ exports.create = (text, callback) => {
   });
 };
 
-
 exports.readOne = (id, callback) => {
   fs.readFile(path.join(exports.dataDir, `${id}.txt`), 'utf8', function(err, data) {
     if (!data) {
@@ -32,10 +31,8 @@ exports.readOne = (id, callback) => {
 };
 
 var promisifiedReadOne = Promise.promisify(exports.readOne);
-console.log('helllooooooo ', typeof exports.readOne);
 
 exports.readAll = (callback) => {
-
   fs.readdir(exports.dataDir, function(err, files) {
     Promise.all(_.map(files, (zeroPaddedNumber) => {
       var id = zeroPaddedNumber.slice(0, 5);
@@ -43,10 +40,9 @@ exports.readAll = (callback) => {
     })).then(function(response) {
       console.log(response);
       callback(null, response);
-    })
+    });
   });
 };
-
 
 exports.update = (id, text, callback) => {
   fs.stat(path.join(exports.dataDir, `${id}.txt`), function(err, stats) {
